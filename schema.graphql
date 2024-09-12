@@ -1,0 +1,10 @@
+type GameDeployed @entity(immutable: true) {
+  id: Bytes!
+  gameAddress: Bytes! # address
+  admin: Bytes! # address
+  timeLimit: BigInt! # uint256
+  scorePoint: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

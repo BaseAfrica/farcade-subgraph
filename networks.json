@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "CharadeGameFactory": {
+      "address": "0x83EC7f2F4B9f50eB964ea181F09aF84a98418ece",
+      "startBlock": 15203473
+    }
+  }
+}
