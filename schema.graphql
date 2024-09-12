@@ -9,14 +9,6 @@ type DeployedGame @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type GameDeployed @entity {
-  id: ID!
-  gameAddress: Bytes!
-  admin: Bytes!
-  timeLimit: BigInt!
-  scorePoint: BigInt!
-}
-
 type Game @entity {
   id: ID!
   admin: Bytes!
@@ -25,65 +17,70 @@ type Game @entity {
   isGameStarted: Boolean!
   currentTeam: Int!
   currentRound: Int!
-  teams: [Team!] @derivedFrom(field: "game")
-  cards: [Card!] @derivedFrom(field: "game")
+  teams: [TeamCreated!] @derivedFrom(field: "game")
+  cards: [CardAdded!] @derivedFrom(field: "game")
 }
 
-type Team @entity {
-  id: ID!
-  game: Game!
-  name: String!
-  members: [Bytes!]!
-  score: BigInt!
-  players: [Player!] @derivedFrom(field: "team")
+type CardAdded @entity(immutable: true) {
+  id: Bytes!
+  game: Game
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type Card @entity {
-  id: ID!
-  game: Game!
-  encryptedWord: String!
-  word: String
-  isUsed: Boolean!
-  team: Team!
-  player: Bytes!
+type GameStarted @entity(immutable: true) {
+  id: Bytes!
+
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type Player @entity {
-  id: ID!
-  team: Team!
-  address: Bytes!
+type PlayerJoinedTeam @entity(immutable: true) {
+  id: Bytes!
+  team: BigInt! # uint256
+  player: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type RoundStarted @entity {
-  id: ID!
-  round: Int!
-  team: Team!
+type RoundStarted @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  team: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type WordChecked @entity {
-  id: ID!
-  team: Team!
-  player: Bytes!
-  encryptedWord: String!
+type ScoreUpdated @entity(immutable: true) {
+  id: Bytes!
+  team: BigInt! # uint256
+  score: BigInt! # uint256
+  word: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type ScoreUpdated @entity {
-  id: ID!
-  team: Team!
-  score: BigInt!
-  word: String!
+type TeamCreated @entity(immutable: true) {
+  id: Bytes!
+  game: Game
+  name: String! # string
+  # members: [Any!] # address[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
-type PlayerJoinedTeam @entity {
-  id: ID!
-  team: Team!
-  player: Bytes!
-}
-
-type GameStarted @entity {
-  id: ID!
-}
-
-type CardAdded @entity {
-  id: ID!
+type WordChecked @entity(immutable: true) {
+  id: Bytes!
+  team: BigInt! # uint256
+  player: Bytes! # address
+  encryptedWord: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }

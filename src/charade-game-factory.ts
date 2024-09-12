@@ -1,5 +1,5 @@
 import { GameDeployed as GameDeployedEvent } from "../generated/CharadeGameFactory/CharadeGameFactory";
-import { DeployedGame } from "../generated/schema";
+import { DeployedGame, Game } from "../generated/schema";
 import { CharadeGameTemplate } from "../generated/templates";
 
 export function handleGameDeployed(event: GameDeployedEvent): void {
@@ -14,6 +14,16 @@ export function handleGameDeployed(event: GameDeployedEvent): void {
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+
+  let game = new Game(event.params.gameAddress.toHexString());
+  game.admin = event.params.admin;
+  game.timeLimit = event.params.timeLimit;
+  game.scorePoint = event.params.scorePoint;
+  game.isGameStarted = false;
+  game.currentTeam = 0;
+  game.currentRound = 0;
+
+  game.save();
 
   entity.save();
   CharadeGameTemplate.create(event.params.gameAddress);
