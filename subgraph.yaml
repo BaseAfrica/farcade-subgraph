@@ -24,3 +24,40 @@ dataSources:
         - event: GameDeployed(address,address,uint256,uint256)
           handler: handleGameDeployed
       file: ./src/charade-game-factory.ts
+
+templates:
+  - name: CharadeGameTemplate
+    kind: ethereum/contract
+    network: base-sepolia
+    source:
+      abi: CharadeGame
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - RoundStarted
+        - WordChecked
+        - ScoreUpdated
+        - PlayerJoinedTeam
+        - GameStarted
+        - CardAdded
+      abis:
+        - name: CharadeGame
+          file: ./abis/CharadeGame.json
+      eventHandlers:
+        - event: RoundStarted(indexed uint256,uint256)
+          handler: handleRoundStarted
+        - event: WordChecked(uint256,indexed address,string)
+          handler: handleWordChecked
+        - event: ScoreUpdated(uint256,uint256,string)
+          handler: handleScoreUpdated
+        - event: PlayerJoinedTeam(uint256,indexed address)
+          handler: handlePlayerJoinedTeam
+        - event: GameStarted()
+          handler: handleGameStarted
+        - event: CardAdded()
+          handler: handleCardAdded
+        - event: TeamCreated(string,address[])
+          handler: handleTeamCreated
+      file: ./src/charade-game.ts
